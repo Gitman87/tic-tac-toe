@@ -10,6 +10,10 @@ function Gameboard() {
     }
   }
   const getBoard = () => board;
+  const markField=(column, player)=>
+  {
+    const freeFields=board
+  }
 }
 function Cell() {
   let value = 0;
@@ -19,10 +23,10 @@ function Cell() {
   const getValue = () => value;
   return { markCell, getValue };
 }
-function createPlayer(number) {
+function createPlayer(number, mark) {
   let name= prompt(`Player ${number} name: `, " " );
   let score=0;
-  let mark=0;
+  
   return {
     name: name,
     score: score,
@@ -34,8 +38,8 @@ function createPlayer(number) {
 function Game(player1 = "Player 1", player2 = "Player 2") {
   const board = Gameboard();
   const players = [
-   createPlayer(1),
-   createPlayer(2)
+   createPlayer(1, "O"),
+   createPlayer(2, "X")
   ];
 
   let activePlayer = players[0];
