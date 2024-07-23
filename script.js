@@ -155,7 +155,7 @@ function playRound(activePlayer, board, player1, player2) {
   // clear board
   printBoard(board);
   console.log(`The board ${board}`);
-  let freeFields = 9;
+  let turns= 9;
   //arrays for checking strike
   let checkArray = [
     [board[0][0], board[0][1], board[0][2]],
@@ -169,11 +169,9 @@ function playRound(activePlayer, board, player1, player2) {
   ];
 
   let roundWinner = 0;
-
-  for (let i = 0; i < freeFields; i++) {
-    if (strike(checkArray) > 0) {
-      break;
-    } else {
+  let checkStrike = 0;
+  for (let i = 0; i < turns; i++) {
+   
       console.log(`Active player is: ${activePlayer.name}`);
       playTurn(activePlayer, board);
       // freeFields--;
@@ -187,23 +185,28 @@ function playRound(activePlayer, board, player1, player2) {
         [board[0][0], board[1][1], board[2][2]],
         [board[0][2], board[1][1], board[2][0]],
       ];
-      console.log(`Check array is ${strike(checkArray)}`);
+      // console.log(`Check array is ${strike(checkArray)}`);
       console.log(`Check array is ${printBoard(checkArray)}`);
-      console.log(`Free fields ${freeFields}`);
+      console.log(`turns is ${i}`);
       if (activePlayer.number == 1) {
         activePlayer = player2;
       } else {
         activePlayer = player1;
       }
+      checkStrike= strike(checkArray);
+      if(checkStrike>0){
+        console.log(`strike is : ${strike(checkArray)}`);
+        break;
+      }
     }
-  }
+  
 
   // while (strike(checkArray) < 1 || freeFields > 0);
 
-  if (strike(checkArray) == 1) {
+  if (checkStrike == 1) {
     roundWinner = 1;
     return roundWinner;
-  } else if (strike(checkArray) == 2) {
+  } else if (checkStrike == 2) {
     roundWinner = 2;
     return roundWinner;
 
