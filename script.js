@@ -12,7 +12,7 @@ function createPlayer(number) {
 
 //print empty board
 function printBoard(board) {
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < board.length; i++) {
     let joined = board[i].join(" ");
     console.log(`    ${joined}`);
   }
@@ -130,18 +130,20 @@ function strike(array) {
     for (let j = 0; j < 3; j++) {
       if (array[i][j] == 1) {
         counter1++;
-      } else if (array[i] == 2) {
+      } else if (array[i][j] == 2) {
         counter2++;
       } else {
-        return 0;
+        break;
       }
     }
+    console.log(`counter1 : ${counter1}, counter2: ${counter2}`);
     if (counter1 > 2) {
       return 1;
     } else if (counter2 > 2) {
       return 2;
     } else {
-      return 0;
+      counter1 = 0;
+      counter2 = 0;
     }
   }
 }
@@ -168,7 +170,7 @@ function playRound(activePlayer, board, player1, player2) {
 
   let roundWinner = 0;
 
-  for (let i = 0; i < freeFields; i++){
+  for (let i = 0; i < freeFields; i++) {
     if (strike(checkArray) > 0) {
       break;
     } else {
@@ -186,29 +188,27 @@ function playRound(activePlayer, board, player1, player2) {
         [board[0][2], board[1][1], board[2][0]],
       ];
       console.log(`Check array is ${strike(checkArray)}`);
-      console.log(`Check array is ${checkArray[0]}`);
+      console.log(`Check array is ${printBoard(checkArray)}`);
       console.log(`Free fields ${freeFields}`);
       if (activePlayer.number == 1) {
         activePlayer = player2;
       } else {
         activePlayer = player1;
       }
-    
     }
   }
 
- 
-// while (strike(checkArray) < 1 || freeFields > 0);
+  // while (strike(checkArray) < 1 || freeFields > 0);
 
-if (strike(checkArray) == 1) {
-  roundWinner = 1;
-  return roundWinner;
-} else if (strike(checkArray) == 2) {
-  roundWinner = 2;
-  return roundWinner;
+  if (strike(checkArray) == 1) {
+    roundWinner = 1;
+    return roundWinner;
+  } else if (strike(checkArray) == 2) {
+    roundWinner = 2;
+    return roundWinner;
 
-  // activePlayer.mark(board)
-}
+    // activePlayer.mark(board)
+  }
 }
 
 function playMatch() {
