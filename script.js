@@ -2,14 +2,26 @@ function createPlayer(number) {
   let name = prompt(`Player ${number} name: `, " ");
   let score = 0;
   number = number;
+  // let pick=function playerPick(cap){
+  //   return cap.value
+  // }
 
   return {
     name: name,
     score: score,
     number: number,
+    // pick: pick
   };
 }
-
+//add listener to every cap
+const caps=document.querySelectorAll(".caps");
+caps.forEach((item)=>
+{
+  item.addEventListener('click', ()=>
+  {
+    // change inner html from zero to activeplayer.number
+  })
+})
 //print empty board
 function printBoard(board) {
   for (let i = 0; i < board.length; i++) {
@@ -17,10 +29,7 @@ function printBoard(board) {
     console.log(`    ${joined}`);
   }
 }
-function playerGuess() {
-  let playerPick = Math.floor(prompt("Type a number 0-8: ", " "));
-  return playerPick;
-}
+
 function playTurn(activePlayer, board) {
   do {
     let playerChoice = playerGuess();
@@ -155,7 +164,7 @@ function playRound(activePlayer, board, player1, player2) {
   // clear board
   printBoard(board);
   console.log(`The board ${board}`);
-  let turns= 9;
+  let turns = 9;
   //arrays for checking strike
   let checkArray = [
     [board[0][0], board[0][1], board[0][2]],
@@ -171,35 +180,33 @@ function playRound(activePlayer, board, player1, player2) {
   let roundWinner = 0;
   let checkStrike = 0;
   for (let i = 0; i < turns; i++) {
-   
-      console.log(`Active player is: ${activePlayer.name}`);
-      playTurn(activePlayer, board);
-      // freeFields--;
-      checkArray = [
-        [board[0][0], board[0][1], board[0][2]],
-        [board[1][0], board[1][1], board[1][2]],
-        [board[2][0], board[2][1], board[2][2]],
-        [board[0][0], board[1][0], board[2][0]],
-        [board[0][1], board[1][1], board[2][1]],
-        [board[0][2], board[1][2], board[2][2]],
-        [board[0][0], board[1][1], board[2][2]],
-        [board[0][2], board[1][1], board[2][0]],
-      ];
-      // console.log(`Check array is ${strike(checkArray)}`);
-      console.log(`Check array is ${printBoard(checkArray)}`);
-      console.log(`turns is ${i}`);
-      if (activePlayer.number == 1) {
-        activePlayer = player2;
-      } else {
-        activePlayer = player1;
-      }
-      checkStrike= strike(checkArray);
-      if(checkStrike>0){
-        console.log(`strike is : ${strike(checkArray)}`);
-        break;
-      }
+    console.log(`Active player is: ${activePlayer.name}`);
+    playTurn(activePlayer, board);
+    // freeFields--;
+    checkArray = [
+      [board[0][0], board[0][1], board[0][2]],
+      [board[1][0], board[1][1], board[1][2]],
+      [board[2][0], board[2][1], board[2][2]],
+      [board[0][0], board[1][0], board[2][0]],
+      [board[0][1], board[1][1], board[2][1]],
+      [board[0][2], board[1][2], board[2][2]],
+      [board[0][0], board[1][1], board[2][2]],
+      [board[0][2], board[1][1], board[2][0]],
+    ];
+    // console.log(`Check array is ${strike(checkArray)}`);
+    console.log(`Check array is ${printBoard(checkArray)}`);
+    console.log(`turns is ${i}`);
+    if (activePlayer.number == 1) {
+      activePlayer = player2;
+    } else {
+      activePlayer = player1;
     }
-  
+    checkStrike = strike(checkArray);
+    if (checkStrike > 0) {
+      console.log(`strike is : ${strike(checkArray)}`);
+      break;
+    }
+  }
 
   // while (strike(checkArray) < 1 || freeFields > 0);
 
