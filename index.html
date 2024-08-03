@@ -11,37 +11,37 @@
       <h1>Tic Tac Toe</h1>
     </header>
     <main>
-      <form action="" id>
+      <form action="" id="player-form">
         <ul id="player-list">
           <li class="player">
             <label for="player1-name-input">Player 1:</label>
-            <input type="text" name="player1-name-input" />
-            <button class="confirm-name">OK</button>
+            <input type="text" name="player1-name-input"  class="name-input" id="playerone-input" required/>
+            <!-- <button class="confirm-name" type="submit">OK</button> -->
           </li>
           <li class="player">
             <label for="player1-name-input">Player 2:</label>
-            <input type="text" name="player2-name-input" />
-            <button class="confirm-name">OK</button>
+            <input type="text" name="player2-name-input" class="name-input" id="playertwo-input" required/>
+            <!-- <button class="confirm-name">OK</button> -->
           </li>
         </ul>
         <div id="number-of-rounds">
           <label for="rounds">Number of rounds</label
-          ><input type="number" name="rounds" min="1" max="99" value="1" />
+          ><input id="rounds" type="number" name="rounds" min="1" max="99" value="1" />
         </div>
         <button id="play" type="submit">Play!</button>
       </form>
       <p id="player-turn">turn</p>
       <div id="gameboard">
         <ul>
-          <li class="cap-li"><button class="cap">.</button></li>
-          <li class="cap-li"><button class="cap">.</button></li>
-          <li class="cap-li"><button class="cap">.</button></li>
-          <li class="cap-li"><button class="cap">.</button></li>
-          <li class="cap-li"><button class="cap">.</button></li>
-          <li class="cap-li"><button class="cap">.</button></li>
-          <li class="cap-li"><button class="cap">.</button></li>
-          <li class="cap-li"><button class="cap">.</button></li>
-          <li class="cap-li"><button class="cap">.</button></li>
+          <li class="cap-li"><button class="cap" data-id="0"></button></li>
+          <li class="cap-li"><button class="cap" data-id="1"></button></li>
+          <li class="cap-li"><button class="cap" data-id="2"></button></li>
+          <li class="cap-li"><button class="cap" data-id="3"></button></li>
+          <li class="cap-li"><button class="cap" data-id="4"></button></li>
+          <li class="cap-li"><button class="cap" data-id="5"></button></li>
+          <li class="cap-li"><button class="cap" data-id="6"></button></li>
+          <li class="cap-li"><button class="cap" data-id="7"></button></li>
+          <li class="cap-li"><button class="cap" data-id="8"></button></li>
         </ul>
       </div>
       <ul id="player-list">
@@ -50,5 +50,6 @@
       </ul>
       <div id="winner"><p id="winner-para"></p></div>
     </main>
+    <script src="script.js"></script>
   </body>
 </html>

@@ -1,282 +1,119 @@
-function createPlayer(number) {
-  let name = prompt(`Player ${number} name: `, " ");
+function createPlayer(number, name) {
   let score = 0;
-  number = number;
-  // let pick=function playerPick(cap){
-  //   return cap.value
-  // }
 
   return {
     name: name,
     score: score,
-    number: number,
-    // pick: pick
+    number: number
   };
 }
-//add listener to every cap
-const caps=document.querySelectorAll(".caps");
-caps.forEach((item)=>
-{
-  item.addEventListener('click', ()=>
-  {
-    // change inner html from zero to activeplayer.number
-  })
-})
-//print empty board
-function printBoard(board) {
-  for (let i = 0; i < board.length; i++) {
-    let joined = board[i].join(" ");
-    console.log(`    ${joined}`);
-  }
-}
 
-function playTurn(activePlayer, board) {
-  do {
-    let playerChoice = playerGuess();
+function GameBoard() {
+  const board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const caps = document.querySelectorAll(".cap");
 
-    switch (playerChoice) {
-      case 0:
-        if (board[0][0] != 0) {
-          alert("Field occupied! Try another");
-          break;
-        } else {
-          board[0][0] = activePlayer.number;
-          picked = 1;
-          console.log(board);
-        }
-
-        break;
-      case 1:
-        if (board[0][1] != 0) {
-          alert("Field occupied! Try another");
-          break;
-        } else {
-          board[0][1] = activePlayer.number;
-          picked = 1;
-          console.log(board);
-        }
-        break;
-      case 2:
-        if (board[0][2] != 0) {
-          alert("Field occupied! Try another");
-          break;
-        } else {
-          board[0][2] = activePlayer.number;
-          picked = 1;
-          console.log(board);
-        }
-        break;
-      case 3:
-        if (board[1][0] != 0) {
-          alert("Field occupied! Try another");
-          break;
-        } else {
-          board[1][0] = activePlayer.number;
-          picked = 1;
-          console.log(board);
-        }
-        break;
-      case 4:
-        if (board[1][1] != 0) {
-          alert("Field occupied! Try another");
-          break;
-        } else {
-          board[1][1] = activePlayer.number;
-          picked = 1;
-          console.log(board);
-        }
-        break;
-      case 5:
-        if (board[1][2] != 0) {
-          alert("Field occupied! Try another");
-          break;
-        } else {
-          board[1][2] = activePlayer.number;
-          picked = 1;
-          console.log(board);
-        }
-        break;
-      case 6:
-        if (board[2][0] != 0) {
-          alert("Field occupied! Try another");
-          break;
-        } else {
-          board[2][0] = activePlayer.number;
-          picked = 1;
-          console.log(board);
-        }
-        break;
-      case 7:
-        if (board[2][1] != 0) {
-          alert("Field occupied! Try another");
-          break;
-        } else {
-          board[2][1] = activePlayer.number;
-          picked = 1;
-          console.log(board);
-        }
-        break;
-      case 8:
-        if (board[2][2] != 0) {
-          alert("Field occupied! Try another");
-          break;
-        } else {
-          board[2][2] = activePlayer.number;
-          picked = 1;
-          console.log(board);
-        }
-        break;
-      default:
-        alert("Only numbers in range  of 0-8!");
-    }
-  } while (picked == 0);
-}
-
-function strike(array) {
-  let counter1 = 0;
-  let counter2 = 0;
-  for (let i = 0; i < array.length; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (array[i][j] == 1) {
-        counter1++;
-      } else if (array[i][j] == 2) {
-        counter2++;
+  function clearBoard() {
+    for (let i = 0; i < board.length; i++) {
+      board[i] = 0;
+      if (caps[i]) {
+        caps[i].innerHTML = "";
       } else {
-        break;
+        console.error(`Cap at index ${i} is undefined.`);
       }
     }
-    console.log(`counter1 : ${counter1}, counter2: ${counter2}`);
-    if (counter1 > 2) {
-      return 1;
-    } else if (counter2 > 2) {
-      return 2;
-    } else {
-      counter1 = 0;
-      counter2 = 0;
-    }
   }
+
+  const getBoard = () => board;
+  const getCaps = () => caps;
+
+  function addCapsListener(activePlayer,player1, player2, switchPlayerTurn) {
+    caps.forEach((item) => {
+      item.addEventListener("click", () => {
+        let index = item.dataset.id;
+        if(activePlayer===player1){
+          activePlayer=player2;
+        }
+        else{
+          activePlayer=player1;
+        }
+        if (board[index] == 0) {
+          board[index] = activePlayer.number;
+          item.innerHTML = activePlayer.number;
+          if (checkWinner()) {
+            alert(`Player ${activePlayer.name} wins!`);
+            activePlayer.score++;
+            console.log(`active player score:${activePlayer.score}`);
+            console.log(`Player1 score: ${player1.score} and player2 score:${player2.score}`)
+            clearBoard();
+          } else if (board.every(cell => cell != 0)) {
+            alert("It's a tie!");
+            clearBoard();
+          } else {
+            
+            switchPlayerTurn();
+          }
+        } else {
+          alert("Field Occupied!");
+        }
+      });
+    });
+  }
+
+  function checkWinner() {
+    const winPatterns = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+      [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
+
+    return winPatterns.some(pattern =>
+      board[pattern[0]] == board[pattern[1]] &&
+      board[pattern[1]] == board[pattern[2]] &&
+      board[pattern[0]] != 0
+    );
+  }
+
+  return { addCapsListener, clearBoard, getBoard, getCaps };
 }
 
-// function checkForNumberInArray(array, search) {
-//   return array.some((row) => row.includes(search));
-// }
-function playRound(activePlayer, board, player1, player2) {
-  // clear board
-  printBoard(board);
-  console.log(`The board ${board}`);
-  let turns = 9;
-  //arrays for checking strike
-  let checkArray = [
-    [board[0][0], board[0][1], board[0][2]],
-    [board[1][0], board[1][1], board[1][2]],
-    [board[2][0], board[2][1], board[2][2]],
-    [board[0][0], board[1][0], board[2][0]],
-    [board[0][1], board[1][1], board[2][1]],
-    [board[0][2], board[1][2], board[2][2]],
-    [board[0][0], board[1][1], board[2][2]],
-    [board[0][2], board[1][1], board[2][0]],
-  ];
+function playRound(player1, player2) {
+  const game = GameBoard();
+  game.clearBoard();
+  let roundWinner=0;
+  let activePlayer = player1;
+  
+  const switchPlayerTurn = () => {
+    document.getElementById("player-turn").textContent = `${activePlayer.name}'s turn`;
 
-  let roundWinner = 0;
-  let checkStrike = 0;
-  for (let i = 0; i < turns; i++) {
-    console.log(`Active player is: ${activePlayer.name}`);
-    playTurn(activePlayer, board);
-    // freeFields--;
-    checkArray = [
-      [board[0][0], board[0][1], board[0][2]],
-      [board[1][0], board[1][1], board[1][2]],
-      [board[2][0], board[2][1], board[2][2]],
-      [board[0][0], board[1][0], board[2][0]],
-      [board[0][1], board[1][1], board[2][1]],
-      [board[0][2], board[1][2], board[2][2]],
-      [board[0][0], board[1][1], board[2][2]],
-      [board[0][2], board[1][1], board[2][0]],
-    ];
-    // console.log(`Check array is ${strike(checkArray)}`);
-    console.log(`Check array is ${printBoard(checkArray)}`);
-    console.log(`turns is ${i}`);
-    if (activePlayer.number == 1) {
-      activePlayer = player2;
-    } else {
-      activePlayer = player1;
-    }
-    checkStrike = strike(checkArray);
-    if (checkStrike > 0) {
-      console.log(`strike is : ${strike(checkArray)}`);
-      break;
-    }
-  }
+     return activePlayer = activePlayer === player1 ? player2 : player1;
+  };
 
-  // while (strike(checkArray) < 1 || freeFields > 0);
-
-  if (checkStrike == 1) {
-    roundWinner = 1;
-    return roundWinner;
-  } else if (checkStrike == 2) {
-    roundWinner = 2;
-    return roundWinner;
-
-    // activePlayer.mark(board)
-  }
+  switchPlayerTurn(); // Initialize turn display
+  game.addCapsListener(activePlayer,player1, player2, switchPlayerTurn); 
+    
 }
 
 function playMatch() {
-  const board = [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0],
-  ];
-  const players = [];
+  const playerOneName = document.querySelector("#playerone-input").value;
+  const playerTwoName = document.querySelector("#playertwo-input").value;
+  let player1 = createPlayer(1, playerOneName);
+  let player2 = createPlayer(2, playerTwoName);
 
-  const player1 = createPlayer(1);
-  players.push(player1);
-
-  const player2 = createPlayer(2);
-  players.push(player2);
-
-  console.log(`Player one: ${player1}`);
-  const rounds = prompt("How many round You want to play? ", " ");
-  let firstPlayer = prompt("Choose first player: ", " ");
-  let activePlayer = {};
-  console.log(`First player is:  ${firstPlayer}`);
-  if (firstPlayer == 1) {
-    activePlayer = player1;
-  } else {
-    activePlayer = player2;
-  }
-  console.log(activePlayer);
-  printBoard(board);
-  console.log(board);
-
-  for (let i = 0; i < rounds; i++) {
-    const board = [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ];
-    printBoard(board);
-    let roundScore = playRound(activePlayer, board, player1, player2);
-    console.log("round played");
-    if (roundScore == 1) {
-      player1.score++;
-      console.log(`Player 1 score:${player1.score}`);
-    } else if (roundScore == 2) {
-      player2.score++;
-      console.log(`Player 2 score:${player2.score}`);
-    } else {
-      console.log("Tie!");
-    }
-  }
-  // checkWinner
-  if (player1.score < player2.score) {
-    alert(
-      `${player1.score} : ${player2.score} - the winner is ${player2.name}!`
-    );
-  } else {
-    alert(
-      `${player1.score} : ${player2.score} - the winner is ${player1.name}!`
-    );
-  }
+  playRound(player1, player2);
 }
-playMatch();
+
+function startGame() {
+  
+  const playButton = document.querySelector("#play");
+  playButton.addEventListener("click", (event) => {
+    event.preventDefault(); // Prevent form submission
+    playMatch();
+  });
+}
+window.onload = function() {
+  document.getElementById("player-form").reset();
+};
+
+document.addEventListener("DOMContentLoaded", (event) => {
+  startGame();
+});
