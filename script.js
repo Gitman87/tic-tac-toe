@@ -23,17 +23,6 @@ function GameBoard() {
       }
     }
   }
-  function clearBoardRed() {
-    for (let i = 0; i < board.length; i++) {
-      board[i] = 0;
-      if (caps[i]) {
-        caps[i].innerHTML = "";
-        caps[i].style = "";
-      } else {
-        console.error(`Cap at index ${i} is undefined.`);
-      }
-    }
-  }
 
   const player1ScoreField = document.querySelector("#player1-score");
   const player2ScoreField = document.querySelector("#player2-score");
@@ -104,9 +93,7 @@ function GameBoard() {
     player1ScoreField.textContent = "";
     player2ScoreField.textContent = "";
 
-    setTimeout(() => {
-      clearBoard();
-    }, 2000);
+    clearBoard();
   };
   function showTie() {
     tieAlert.showModal();
@@ -114,7 +101,7 @@ function GameBoard() {
       tieAlert.close();
     }, 1500);
   }
-
+  let playerSwitchFlag=1;
   function addCapsListener(
     activePlayer,
     player1,
@@ -131,6 +118,9 @@ function GameBoard() {
         } else {
           activePlayer = player1;
         }
+        document.querySelector(
+          "#player-turn"
+        ).textContent = `${activePlayer.name}'s turn`;
         if (board[index] == 0) {
           board[index] = activePlayer.number;
           item.innerHTML = activePlayer.number;
@@ -144,6 +134,7 @@ function GameBoard() {
             player1ScoreField.textContent = player1.score;
             player2ScoreField.textContent = player2.score;
             roundsPlayed++;
+            switchPlayerTurn();
             console.log(`Rounds played: ${roundsPlayed}`);
 
             if (roundsPlayed >= rounds) {
@@ -152,12 +143,15 @@ function GameBoard() {
                 roundsPlayed = 0;
                 player1.score = 0;
                 player2.score = 0;
+                
+
                 console.log(`Rounds played player1 won: ${roundsPlayed}`);
               } else if (player1.score < player2.score) {
                 askReplay(player2, player1, player2, activePlayer);
                 roundsPlayed = 0;
                 player1.score = 0;
                 player2.score = 0;
+
                 console.log(`Rounds played player2 won: ${roundsPlayed}`);
               } else {
                 tieShow(player1, player2, activePlayer);
@@ -165,6 +159,7 @@ function GameBoard() {
 
                 player1.score = 0;
                 player2.score = 0;
+
                 console.log(`Rounds played tie: ${roundsPlayed}`);
               }
             }
@@ -181,6 +176,7 @@ function GameBoard() {
                 roundsPlayed = 0;
                 player1.score = 0;
                 player2.score = 0;
+                
               } else if (player1.score < player2.score) {
                 askReplay(player2, player1, player2, activePlayer);
                 roundsPlayed = 0;
@@ -230,12 +226,6 @@ function GameBoard() {
         return winPatterns[i];
       }
     }
-    // return winPatterns.some(
-    //   (pattern) =>
-    //     board[pattern[0]] == board[pattern[1]] &&
-    //     board[pattern[1]] == board[pattern[2]] &&
-    //     board[pattern[0]] != 0
-    // );
   }
 
   return { addCapsListener, clearBoard, getBoard, getCaps };
@@ -245,17 +235,17 @@ function playRound(player1, player2, roundsPlayed, rounds) {
   const game = GameBoard();
   game.clearBoard();
 
-  let activePlayer = player1;
+  let activePlayer = roundsPlayed % 2 === 0 ? player1 : player2;
 
   const switchPlayerTurn = () => {
     document.querySelector(
       "#player-turn"
-    ).textContent = `${activePlayer.name}'s turn`;
+    ).textContent = `${activePlayer.name}'s turnz`;
 
     return (activePlayer = activePlayer === player1 ? player2 : player1);
   };
 
-  switchPlayerTurn(); // Initialize turn display
+  switchPlayerTurn();
   game.addCapsListener(
     activePlayer,
     player1,
