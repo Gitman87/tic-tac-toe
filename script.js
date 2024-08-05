@@ -27,6 +27,16 @@ function GameBoard() {
 
   const getBoard = () => board;
   const getCaps = () => caps;
+  const paintCaps = (cap1, cap2, cap3) => {
+    for (let i = 0; i < 3; i++) {
+      const filed1 = document.querySelector(`[data-id="${cap1}"]`);
+      filed1.style.backgroundColor = "red";
+      const filed2 = document.querySelector(`[data-id="${cap2}"]`);
+      filed2.style.backgroundColor = "red";
+      const filed3 = document.querySelector(`[data-id="${cap3}"]`);
+      filed3.style.backgroundColor = "red";
+    }
+  };
 
   function addCapsListener(
     activePlayer,
@@ -48,6 +58,10 @@ function GameBoard() {
           board[index] = activePlayer.number;
           item.innerHTML = activePlayer.number;
           if (checkWinner()) {
+         
+            console.log(`checkwinner array is: ${checkWinner()[2]}`);
+            paintCaps(checkWinner()[0], checkWinner()[1],checkWinner()[2]);
+            
             alert(`Player ${activePlayer.name} wins!`);
 
             activePlayer.score++;
@@ -110,13 +124,21 @@ function GameBoard() {
       [0, 4, 8],
       [2, 4, 6], // diagonals
     ];
-      
-    return winPatterns.some(
-      (pattern) =>
-        board[pattern[0]] == board[pattern[1]] &&
-        board[pattern[1]] == board[pattern[2]] &&
-        board[pattern[0]] != 0
-    );
+    const checkHit = (pattern) =>
+      board[pattern[0]] == board[pattern[1]] &&
+      board[pattern[1]] == board[pattern[2]] &&
+      board[pattern[0]] != 0;
+    for (let i = 0; i < winPatterns.length; i++) {
+      if (checkHit(winPatterns[i])) {
+        return winPatterns[i];
+      }
+    }
+    // return winPatterns.some(
+    //   (pattern) =>
+    //     board[pattern[0]] == board[pattern[1]] &&
+    //     board[pattern[1]] == board[pattern[2]] &&
+    //     board[pattern[0]] != 0
+    // );
   }
 
   return { addCapsListener, clearBoard, getBoard, getCaps };
