@@ -17,11 +17,24 @@ function GameBoard() {
       board[i] = 0;
       if (caps[i]) {
         caps[i].innerHTML = "";
+        caps[i].style = "";
       } else {
         console.error(`Cap at index ${i} is undefined.`);
       }
     }
   }
+  function clearBoardRed() {
+    for (let i = 0; i < board.length; i++) {
+      board[i] = 0;
+      if (caps[i]) {
+        caps[i].innerHTML = "";
+        caps[i].style = "";
+      } else {
+        console.error(`Cap at index ${i} is undefined.`);
+      }
+    }
+  }
+
   const player1ScoreField = document.querySelector("#player1-score");
   const player2ScoreField = document.querySelector("#player2-score");
 
@@ -37,6 +50,70 @@ function GameBoard() {
       filed3.style.backgroundColor = "red";
     }
   };
+  //dialog - show winner and ask for replay
+  const dialog = document.querySelector("#replay");
+  const yes = document.querySelector("#yes");
+  const no = document.querySelector("#no");
+  const winner = document.querySelector("#show-winner");
+  //tie
+  const tieDialog = document.querySelector("#tie-dialog");
+  const tieReplay = document.querySelector("#tie-replay");
+  const tieClose = document.querySelector("#tie-close");
+  //occupied
+  const occupied = document.querySelector("#occupied");
+  const tieAlert = document.querySelector("#tie-alert");
+  //player won round
+  const playerWon = document.querySelector("#player-won-round");
+  const playerWonPara = document.querySelector("#player-won-para");
+
+  const showWinnerOfRound = (player) => {
+    playerWonPara.textContent = `${player.name} has won the round`;
+    playerWon.showModal();
+    setTimeout(() => {
+      playerWon.close();
+    }, 1700);
+  };
+  const askReplay = (player, player1, player2, activePlayer) => {
+    dialog.showModal();
+    winner.textContent = `${player.name}`;
+    no.addEventListener("click", () => {
+      dialog.close();
+      window.location.reload(true);
+    });
+    yes.addEventListener("click", () => {
+      dialog.close();
+      playReplay(player1, player2, activePlayer);
+    });
+  };
+  const tieShow = (player1, player2, activePlayer) => {
+    tieDialog.showModal();
+
+    tieReplay.addEventListener("click", () => {
+      tieDialog.close();
+      playReplay(player1, player2, activePlayer);
+    });
+    tieClose.addEventListener("click", () => {
+      window.location.reload(true);
+    });
+  };
+  // play replay
+  const playReplay = (player1, player2, activePlayer) => {
+    player1.score = 0;
+    player2.score = 0;
+    activePlayer.score = 0;
+    player1ScoreField.textContent = "";
+    player2ScoreField.textContent = "";
+
+    setTimeout(() => {
+      clearBoard();
+    }, 2000);
+  };
+  function showTie() {
+    tieAlert.showModal();
+    setTimeout(() => {
+      tieAlert.close();
+    }, 1500);
+  }
 
   function addCapsListener(
     activePlayer,
@@ -58,56 +135,76 @@ function GameBoard() {
           board[index] = activePlayer.number;
           item.innerHTML = activePlayer.number;
           if (checkWinner()) {
-         
             console.log(`checkwinner array is: ${checkWinner()[2]}`);
-            paintCaps(checkWinner()[0], checkWinner()[1],checkWinner()[2]);
-            
-            alert(`Player ${activePlayer.name} wins!`);
+            paintCaps(checkWinner()[0], checkWinner()[1], checkWinner()[2]);
+            showWinnerOfRound(activePlayer);
+            console.log(`Player ${activePlayer.name} wins!`);
 
             activePlayer.score++;
             player1ScoreField.textContent = player1.score;
             player2ScoreField.textContent = player2.score;
             roundsPlayed++;
+            console.log(`Rounds played: ${roundsPlayed}`);
 
-            console.log(roundsPlayed);
             if (roundsPlayed >= rounds) {
               if (player1.score > player2.score) {
-                alert(`${player1.name} wins the match!`);
-                window.location.reload(true);
+                askReplay(player1, player1, player2, activePlayer);
+                roundsPlayed = 0;
+                player1.score = 0;
+                player2.score = 0;
+                console.log(`Rounds played player1 won: ${roundsPlayed}`);
               } else if (player1.score < player2.score) {
-                alert(`${player2.name} wins the match!`);
-                window.location.reload(true);
+                askReplay(player2, player1, player2, activePlayer);
+                roundsPlayed = 0;
+                player1.score = 0;
+                player2.score = 0;
+                console.log(`Rounds played player2 won: ${roundsPlayed}`);
               } else {
-                alert("Game over! A tie!");
-                window.location.reload(true);
+                tieShow(player1, player2, activePlayer);
+                roundsPlayed = 0;
+
+                player1.score = 0;
+                player2.score = 0;
+                console.log(`Rounds played tie: ${roundsPlayed}`);
               }
             }
-            console.log(`active player score:${activePlayer.score}`);
-            console.log(
-              `Player1 score: ${player1.score} and player2 score:${player2.score}`
-            );
-            clearBoard();
+
+            setTimeout(() => {
+              clearBoard();
+            }, 2000);
           } else if (board.every((cell) => cell != 0)) {
-            alert("It's a tie!");
+            showTie();
             roundsPlayed++;
             if (roundsPlayed >= rounds) {
               if (player1.score > player2.score) {
-                alert(`${player1.name} wins the match!`);
-                window.location.reload(true);
+                askReplay(player1, player1, player2, activePlayer);
+                roundsPlayed = 0;
+                player1.score = 0;
+                player2.score = 0;
               } else if (player1.score < player2.score) {
-                alert(`${player2.name} wins the match!`);
-                window.location.reload(true);
+                askReplay(player2, player1, player2, activePlayer);
+                roundsPlayed = 0;
+                player1.score = 0;
+                player2.score = 0;
               } else {
-                alert("Game over! A tie!");
-                window.location.reload(true);
+                tieShow(player1, player2, activePlayer);
+                roundsPlayed = 0;
+
+                player1.score = 0;
+                player2.score = 0;
               }
             }
-            clearBoard();
+            setTimeout(() => {
+              clearBoard();
+            }, 2000);
           } else {
             switchPlayerTurn();
           }
         } else {
-          alert("Field Occupied!");
+          occupied.showModal();
+          setTimeout(() => {
+            occupied.close();
+          }, 700);
         }
       });
     });

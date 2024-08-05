@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header>
@@ -15,18 +15,37 @@
         <ul id="player-list">
           <li class="player">
             <label for="player1-name-input">Player 1:</label>
-            <input type="text" name="player1-name-input"  class="name-input" id="playerone-input" required/>
+            <input
+              type="text"
+              name="player1-name-input"
+              class="name-input"
+              id="playerone-input"
+              required
+            />
             <!-- <button class="confirm-name" type="submit">OK</button> -->
           </li>
           <li class="player">
             <label for="player1-name-input">Player 2:</label>
-            <input type="text" name="player2-name-input" class="name-input" id="playertwo-input" required/>
+            <input
+              type="text"
+              name="player2-name-input"
+              class="name-input"
+              id="playertwo-input"
+              required
+            />
             <!-- <button class="confirm-name">OK</button> -->
           </li>
         </ul>
         <div id="number-of-rounds">
           <label for="rounds">Number of rounds</label
-          ><input id="rounds" type="number" name="rounds" min="1" max="99" value="1" />
+          ><input
+            id="rounds"
+            type="number"
+            name="rounds"
+            min="1"
+            max="99"
+            value="1"
+          />
         </div>
         <button id="play" type="submit">Play!</button>
       </form>
@@ -45,10 +64,37 @@
         </ul>
       </div>
       <ul id="player-list">
-        <li>Player 1 score: <span id="player1-score" ></span></li>
-        <li>Player 2 score: <span id="player2-score" ></span></li>
+        <li>Player 1 score: <span id="player1-score"></span></li>
+        <li>Player 2 score: <span id="player2-score"></span></li>
       </ul>
-      <div id="winner"><p id="winner-para"></p></div>
+      <dialog data-modal id="replay">
+        <form method="dialog">
+          <p>The match winner is <span id="show-winner"></span></p>
+          <p>Do You wanna play again?</p>
+          <button type="submit" id="yes">Yes</button
+          ><button type="submit" id="no">No</button>
+        </form>
+      </dialog>
+      <dialog id="tie-dialog" data-modal>
+        <p>It's a tie! Game over!</p>
+        <p>Do You wanna play again?</p>
+        <form method="dialog">
+          <button id="tie-replay" type="submit">Yes</button>
+
+          <button id="tie-close" type="submit">No</button>
+        </form>
+      </dialog>
+      <dialog id="occupied" data-modal>
+        <p>Field occupied!</p>
+        
+      </dialog>
+      <dialog id="tie-alert" data-modal>
+        <p>It's a tie!</p>
+        
+      </dialog>
+      <dialog id="player-won-round">
+        <p id="player-won-para"></p>
+      </dialog>
     </main>
     <script src="script.js"></script>
   </body>
