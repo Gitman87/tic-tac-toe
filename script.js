@@ -123,9 +123,6 @@ function GameBoard() {
       item.addEventListener("click", () => {
         let index = item.dataset.id;
 
-        // document.querySelector(
-        //   "#player-turn"
-        // ).textContent = `${activePlayer.name}'s turn`;
         if (board[index] == 0) {
           if (activePlayer === player1) {
             activePlayer = player2;
@@ -135,17 +132,13 @@ function GameBoard() {
           board[index] = activePlayer.number;
           item.innerHTML = activePlayer.number;
           if (checkWinner()) {
-            console.log(`checkwinner array is: ${checkWinner()[2]}`);
             paintCaps(checkWinner()[0], checkWinner()[1], checkWinner()[2]);
             showWinnerOfRound(activePlayer);
-            console.log(`Player ${activePlayer.name} wins!`);
-
             activePlayer.score++;
             player1ScoreField.textContent = player1.score;
             player2ScoreField.textContent = player2.score;
             roundsPlayed++;
             switchPlayerTurn();
-            console.log(`Rounds played: ${roundsPlayed}`);
 
             if (roundsPlayed >= rounds) {
               if (player1.score > player2.score) {
@@ -153,26 +146,18 @@ function GameBoard() {
                 roundsPlayed = 0;
                 player1.score = 0;
                 player2.score = 0;
-
-                console.log(`Rounds played player1 won: ${roundsPlayed}`);
               } else if (player1.score < player2.score) {
                 askReplay(player2, player1, player2, activePlayer);
                 roundsPlayed = 0;
                 player1.score = 0;
                 player2.score = 0;
-
-                console.log(`Rounds played player2 won: ${roundsPlayed}`);
               } else {
                 tieShow(player1, player2, activePlayer);
                 roundsPlayed = 0;
-
                 player1.score = 0;
                 player2.score = 0;
-
-                console.log(`Rounds played tie: ${roundsPlayed}`);
               }
             }
-
             setTimeout(() => {
               clearBoard();
             }, 2000);
@@ -198,7 +183,6 @@ function GameBoard() {
               } else {
                 tieShow(player1, player2, activePlayer);
                 roundsPlayed = 0;
-
                 player1.score = 0;
                 player2.score = 0;
               }
@@ -275,7 +259,7 @@ function playMatch() {
   let player1 = createPlayer("O", playerOneName);
   let player2 = createPlayer("X", playerTwoName);
   const rounds = document.querySelector("#rounds").value;
-  console.log(`rounds: ${rounds}`);
+  
   let roundsPlayed = 0;
 
   playRound(player1, player2, roundsPlayed, rounds);
@@ -284,7 +268,7 @@ function playMatch() {
 function startGame() {
   const playButton = document.querySelector("#play");
   playButton.addEventListener("click", (event) => {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault();
     playMatch();
   });
 }
