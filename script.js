@@ -32,11 +32,20 @@ function GameBoard() {
   const paintCaps = (cap1, cap2, cap3) => {
     for (let i = 0; i < 3; i++) {
       const filed1 = document.querySelector(`[data-id="${cap1}"]`);
-      filed1.style.backgroundColor = "red";
+      filed1.style.backgroundImage =
+        "repeating-linear-gradient(45deg, #ff4b4b, #ff4b4b 2.5px, transparent 0, transparent 50%)";
+      filed1.style.backgroundSize = " 17px 17px";
+      filed1.style.backgroundColor = "rgba(255, 225, 225, 0)";
       const filed2 = document.querySelector(`[data-id="${cap2}"]`);
-      filed2.style.backgroundColor = "red";
+      filed2.style.backgroundImage =
+        "repeating-linear-gradient(45deg, #ff4b4b 0, #ff4b4b 2.5px, transparent 0, transparent 50%)";
+      filed2.style.backgroundSize = " 17px 17px";
+      filed2.style.backgroundColor = "rgba(255, 225, 225, 0)";
       const filed3 = document.querySelector(`[data-id="${cap3}"]`);
-      filed3.style.backgroundColor = "red";
+      filed3.style.backgroundImage =
+        "repeating-linear-gradient(45deg, #ff4b4b 0, #ff4b4b 2.5px, transparent 0, transparent 50%)";
+      filed3.style.backgroundSize = " 17px 17px";
+      filed3.style.backgroundColor = "rgba(255, 225, 225, 0)";
     }
   };
   //dialog - show winner and ask for replay
@@ -101,7 +110,7 @@ function GameBoard() {
       tieAlert.close();
     }, 1500);
   }
-  let playerSwitchFlag=1;
+
   function addCapsListener(
     activePlayer,
     player1,
@@ -113,15 +122,16 @@ function GameBoard() {
     caps.forEach((item) => {
       item.addEventListener("click", () => {
         let index = item.dataset.id;
-        if (activePlayer === player1) {
-          activePlayer = player2;
-        } else {
-          activePlayer = player1;
-        }
-        document.querySelector(
-          "#player-turn"
-        ).textContent = `${activePlayer.name}'s turn`;
+
+        // document.querySelector(
+        //   "#player-turn"
+        // ).textContent = `${activePlayer.name}'s turn`;
         if (board[index] == 0) {
+          if (activePlayer === player1) {
+            activePlayer = player2;
+          } else {
+            activePlayer = player1;
+          }
           board[index] = activePlayer.number;
           item.innerHTML = activePlayer.number;
           if (checkWinner()) {
@@ -143,7 +153,6 @@ function GameBoard() {
                 roundsPlayed = 0;
                 player1.score = 0;
                 player2.score = 0;
-                
 
                 console.log(`Rounds played player1 won: ${roundsPlayed}`);
               } else if (player1.score < player2.score) {
@@ -168,6 +177,11 @@ function GameBoard() {
               clearBoard();
             }, 2000);
           } else if (board.every((cell) => cell != 0)) {
+            if (activePlayer === player1) {
+              activePlayer = player2;
+            } else {
+              activePlayer = player1;
+            }
             showTie();
             roundsPlayed++;
             if (roundsPlayed >= rounds) {
@@ -176,7 +190,6 @@ function GameBoard() {
                 roundsPlayed = 0;
                 player1.score = 0;
                 player2.score = 0;
-                
               } else if (player1.score < player2.score) {
                 askReplay(player2, player1, player2, activePlayer);
                 roundsPlayed = 0;
@@ -240,7 +253,7 @@ function playRound(player1, player2, roundsPlayed, rounds) {
   const switchPlayerTurn = () => {
     document.querySelector(
       "#player-turn"
-    ).textContent = `${activePlayer.name}'s turnz`;
+    ).textContent = `${activePlayer.name}'s turn`;
 
     return (activePlayer = activePlayer === player1 ? player2 : player1);
   };
